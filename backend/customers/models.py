@@ -1,17 +1,24 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-class Customer(models.Model):
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+class Customer(AbstractUser):
     email = models.EmailField(unique=True)
-    username = models.CharField(max_length=150)
-    password = models.CharField(max_length=128)
+    birth_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return self.username
 
-# CREATE TABLE Customer (
-#     id INT AUTO_INCREMENT PRIMARY KEY,   -- automatically added by Django
-#     email VARCHAR(254) UNIQUE NOT NULL,  -- EmailField translates to VARCHAR in most databases
-#     password VARCHAR(128) NOT NULL,      -- CharField with max length 128
-#     username VARCHAR(150) UNIQUE NOT NULL
-# );
+
+'''
+CREATE TABLE customers_customer (
+    id SERIAL PRIMARY KEY,               -- Auto-incremented ID
+    email VARCHAR(254) NOT NULL UNIQUE,  -- Email, unique
+    username VARCHAR(150) NOT NULL,      -- Username
+    password VARCHAR(128) NOT NULL,      -- Password
+    birth_date DATE NOT NULL             -- Required birth date
+);
 #  under the hood, Django will create a table named "customers_customer" (appname_modelname)
+'''

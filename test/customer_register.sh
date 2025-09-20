@@ -7,10 +7,11 @@ echo "Testing registration endpoint..."
 curl -X POST $URL \
   -H "Content-Type: application/json" \
   -d '{
-        "email": "test@mail.com",
-        "username": "bendoe",
-        "password": "pass1234"
-      }'
+    "email": "test2@example.com",
+    "password": "secret123",
+    "username": "tester2",
+    "birth_date": "1995-05-20"
+  }'
 
 echo -e "\n"
 # python manage.py makemigrations

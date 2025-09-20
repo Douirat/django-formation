@@ -1,41 +1,86 @@
-#  Here we control the logic of our application and hande requests
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
-from django.contrib.auth.hashers import make_password # TODO: check password will be imported later for login.
 from .serializers import CustomerSerializer
-from .models import Customer
+from django.contrib.auth import authenticate
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import get_user_model
 
+Customer = get_user_model()  # this will get the custom user model to help with authentication and token generation and database operations.
 
-#1.  we need to import api_view to define the type of request (GET, POST, etc)
-#  the purpose of api_view is to specify which HTTP method the views will accept.
-#  ex: @api_view(['POST']) means this view will only handle POST requests.
+# -------------
+# REGISTRATION
+# -------------
 
-# 2.  we import Response to send back HTTP responses from our view functions.
-#  Response is a subclass of Django's standard HttpResponse that allows us to return
-#  data in various formats (like JSON) and set HTTP status codes easily.
-
-# 3. we import status to use standard HTTP status codes in our responses.
-
-# 4.  we import check_password to verify hashed passwords during login and authentication
-#  and to hash passwords before storing them in the database.
-
-# 5.  we import CustomerSerializer to convert Customer model instances to and from JSON.
-#  and we import the Customer model to interact with the database records.
-
-# specify the method of the request:
-@api_view(['post'])
-def register_customer(request): # we provide the request as a parameter so the function can have access to the requested data:
-    #  we create a serializer instance with the data from the request:
+@api_view(['POST'])
+@permission_classes([AllowAny])  # Allow any user (authenticated or not) to access this view
+def register_customer(request):
+    print
     serializer = CustomerSerializer(data=request.data)
-    if serializer.is_valid(): # we check if the data is valid according to the serializer's rules:
-        customer = Customer(
-            email = serializer.validated_data['email'],
-            username = serializer.validated_data['username'],
-            password = make_password(serializer.validated_data['password']) 
-            )# If the data is valid we extract the customer from the serializer to save it using the model in respect to the MVS: 
-        customer.save() # this will save the new customer to data base because the class custemer inherits from models.Model and have access the save method.
-        return Response(serializer.data, status=status.HTTP_201_CREATED) # we return the serialized data with a 201 status code (created):
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) # if the data is not valid we return the errors with a 400 status code (bad request):
+    if serializer.is_valid():
+            validated_data = serializer.validated_data
+            print(f'Validated data: {validated_data}')  # Debug
+            password = validated_data.pop('password')
+            user = Customer(**validated_data)
+            user.set_password(password)  # Hash the password
+            user.save()
+            print(f'User {user.username} created successfully.')  # Debug
+            token, created = Token.objects.get_or_create(user=user)
+            if created:
+                print(f'Token created for user {user.username}: {token.key}')
+            else:
+                print(f'Token already exists for user {user.username}: {token.key}')
 
-# TODO: login here later.
+            return Response(
+            {
+                'token': token.key,
+                'customer': CustomerSerializer(user).data
+            },
+        status=status.HTTP_201_CREATED
+        )
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# -------------
+# LOGIN
+# -------------
+@api_view(['POST'])
+@permission_classes([AllowAny])  # Allow any user (authenticated or not) to access.
+def login_customer(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+    print(f'Attempting to authenticate user with username: {username}')
+    user = authenticate(username=username, password=password)
+    print(f'Authentication result for user {username}: {user}')  # Debug
+    
+    if user:
+        token, created = Token.objects.get_or_create(user = user)
+        if created:
+            print(f'Token created for user {user.username}: {token.key}')
+        else:
+            print(f'Token already exists for user {user.username}: {token.key}')
+            return Response(
+                {
+                    'token': token.key,
+                    'customer': CustomerSerializer(user).data
+                },
+                status=status.HTTP_200_OK
+            )
+    return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
+# -------------
+# LOGOUT
+# -------------
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])  # Allow any user (authenticated or not) to access.
+@csrf_exempt
+def logout_customer(request):
+     user = request.user
+     if user.is_authenticated:
+         Token.objects.filter(user=user).delete()
+         return Response({'success': 'Logged out successfully'}, status=status.HTTP_200_OK)
+     return Response({'error': 'User not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
