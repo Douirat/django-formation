@@ -7,7 +7,7 @@ echo "Testing login endpoint..."
 curl -X POST http://127.0.0.1:8000/customers/login/ \
   -H "Content-Type: application/json" \
   -d '{
-    "username": "tester2",
+    "username": "tester3",
     "password": "secret123"
   }'
 

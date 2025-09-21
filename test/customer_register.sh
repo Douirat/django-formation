@@ -7,9 +7,9 @@ echo "Testing registration endpoint..."
 curl -X POST $URL \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "test2@example.com",
+    "email": "test3@example.com",
     "password": "secret123",
-    "username": "tester2",
+    "username": "tester3",
     "birth_date": "1995-05-20"
   }'
 
