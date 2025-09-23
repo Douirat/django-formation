@@ -1,7 +1,6 @@
 'use client'
 
 import { authUser } from '../../contexts/authContext'
-import { useState, useEffect } from 'react'
 import Link from "next/link"
 
 export default function HeaderComponent() {
@@ -47,6 +46,7 @@ export default function HeaderComponent() {
                 <header>
                     <div>
                         <Link href="/">Home</Link>
+                        <Link href="/profile">Profile</Link>
                     </div>
                     <div>
                         <Link href="/services">Services</Link>
