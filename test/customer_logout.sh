@@ -5,7 +5,7 @@
 # -----------------------------
 
 # Hardcoded token from login
-TOKEN="ca869656913bba3dcaed3c6e9a78496a7252e3be"
+TOKEN="110ae0b33ff8dfeadc5a3d36a1c8ee91a23e23c4"
 
 echo "Testing logout endpoint with token: $TOKEN"
 

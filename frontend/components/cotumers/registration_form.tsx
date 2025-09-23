@@ -2,6 +2,7 @@
 
 import Costumer from "../../lib/types/costumer";
 import { useState } from "react";
+import { authUser } from "../../contexts/authContext";
 
 export default function CostumerRegistrationForm() {
   // form state
@@ -15,6 +16,8 @@ export default function CostumerRegistrationForm() {
   // message for errors/success
   const [message, setMessage] = useState<string>("");
 
+  // extract context functionality:
+  const { Login, toggleToCostumer } = authUser();
   // handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -47,11 +50,32 @@ export default function CostumerRegistrationForm() {
     }
 
     // birth_date validation
+    // birth_date validation
     const birthDateObj = new Date(costumerData.birth_date);
+
+    // Check if it's a valid date
     if (isNaN(birthDateObj.getTime())) {
       setMessage("Invalid birth date");
       return false;
     }
+
+    // Check if older than 18
+    const today = new Date();
+    const age = today.getFullYear() - birthDateObj.getFullYear();
+    const monthDiff = today.getMonth() - birthDateObj.getMonth();
+    const dayDiff = today.getDate() - birthDateObj.getDate();
+
+    let finalAge = age;
+    // Adjust if birthday hasn't occurred yet this year
+    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+      finalAge--;
+    }
+
+    if (finalAge < 18) {
+      setMessage("You must be at least 18 years old");
+      return false;
+    }
+
 
     return true;
   };
@@ -77,8 +101,10 @@ export default function CostumerRegistrationForm() {
 
       if (!res.ok) throw new Error("Registration failed");
       setMessage("Registered successfully!");
-      console.log("response", await res.json());
-      
+      const data = await res.json()
+      console.log("response", data); // THis line will wait foe the web API to resolve the promise then finish execution because of the blocking await keyword.
+      localStorage.setItem("authToken", data.token);
+      Login()
       // reset form
       setCostmerData({ email: "", password: "", username: "", birth_date: "" });
     } catch (err: any) {
