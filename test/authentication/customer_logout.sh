@@ -5,11 +5,11 @@
 # -----------------------------
 
 # Hardcoded token from login
-TOKEN="110ae0b33ff8dfeadc5a3d36a1c8ee91a23e23c4"
+TOKEN="551a4ec6d4429e8578fea6d687a54035b6bf76db"
 
-echo "Testing logout endpoint with token: $TOKEN"
+echo "Testing logout endpoint..."
 
-curl -X POST http://127.0.0.1:8000/customers/logout/ \
+curl -X POST http://127.0.0.1:8000/authentication/logout/ \
   -H "Content-Type: application/json" \
   -H "Authorization: Token $TOKEN"
 

@@ -19,5 +19,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('customers/', include('customers.urls'))  # Include the customers app URLs, this will delegate to customers/urls.py
+    path('authentication/', include('authentication.urls'))  # Include the customers app URLs, this will delegate to customers/urls.py
 ]

@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
-    'customers',
+    'authentication',
 ]
 
 
@@ -121,7 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = 'customers.Customer'  # Custom user model
+AUTH_USER_MODEL = 'authentication.User'  # Custom user model
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
