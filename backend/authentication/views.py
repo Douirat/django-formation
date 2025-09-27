@@ -67,7 +67,7 @@ def logout_view(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 @csrf_exempt
-def customer_register_view(request):
+def costumer_register_view(request):
     """
     Customer registration API endpoint
     POST /api/auth/register/customer/
@@ -92,6 +92,7 @@ def customer_register_view(request):
             },
             status=status.HTTP_200_OK
         )
+    print(f"error durring serialization: {costumer_serializer.errors}")
     return Response(costumer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # ====> Company:
@@ -124,3 +125,11 @@ def company_register_view(request):
             status=status.HTTP_200_OK
         )
     return Response(serialized_company.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Authenticate the session:
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def authenticate_view(request):
+    user = request.user
+    serializer = UserSerializer(user)
+    return Response(serializer.data)

@@ -1,31 +1,24 @@
-'use client'
-import { useState, useEffect } from 'react'
-import CostumerRegistrationForm from "../../components/cotumers/registration_form";
+"use client";
+import { useState, useEffect } from "react";
+import CostumerRegistrationForm from "../../components/user/registration_form";
+import { authUser } from "../../contexts/authContext";
 
 export default function RegistrationPage() {
-    const [userType, setUserType] = useState<'costumer' | 'company' | ''>('')
-    const setCostumer = () => setUserType("costumer")
-    const setCompany = () => setUserType("company")
+  const {chosen_user, chooseCostumer, chooseCompany, loggedUser, toggleToCostumer, toggleToCompany, Logout } = authUser();
 
-    return (
+  return (
+    <div>
+      {chosen_user === "costumer" || chosen_user === "company" ? (
         <div>
-            {
-                userType === "costumer" ? (
-                    <div>
-                        <CostumerRegistrationForm />
-                    </div>
-                ) : userType === "company" ? (
-                    <div>Company form</div>
-                ) : (
-                    <div>
-                        <p>Please choose user type</p>
-                        <button onClick={setCostumer}>costumer</button>
-                        <button onClick={setCompany}>Company</button>
-                    </div>
-
-                )
-            }
-
+          <CostumerRegistrationForm />
         </div>
-    )
+      ) : (
+        <div>
+          <p>Please choose user type</p>
+          <button onClick={chooseCostumer}>costumer</button>
+          <button onClick={chooseCompany}>Company</button>
+        </div>
+      )}
+    </div>
+  );
 }

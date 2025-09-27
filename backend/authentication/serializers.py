@@ -6,6 +6,7 @@ import datetime
 
 # general user serializer:
 class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only= True)
     class Meta:
         model = User
         fields = ['id', 'email', 'password', 'username', 'date_of_birth', 'field_of_work', 'date_joined']
@@ -45,7 +46,7 @@ class CostumerRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email', 'username', 'date_of_birth', 'password', 'password_confirm')
+        fields = ('email', 'username', 'date_of_birth', 'password', 'password_confirm', 'user_type')
 
 
     def validate(self, attrs):
@@ -68,7 +69,7 @@ class CostumerRegistrationSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             username=validated_data['username'],
             password=validated_data['password'],
-            user_type='costumer',
+            user_type=validated_data['user_type'],
             date_of_birth=validated_data['date_of_birth']
         )
         return user
@@ -81,7 +82,7 @@ class CompanyRegistrationSerializer(serializers.ModelSerializer):
     # field_of_work choices are in the model.
     class Meta:
         model = User
-        fields = ('email', 'username', 'field_of_work', 'password', 'password_confirm')
+        fields = ('email', 'username', 'field_of_work', 'password', 'password_confirm', 'user_type')
 
     def validate(self, data):
         print(f"the data in the company serializer is: {data}")
@@ -90,14 +91,14 @@ class CompanyRegistrationSerializer(serializers.ModelSerializer):
         return data
     
     def create(self, valid_data):
+        
         valid_data.pop('password_confirm')
         print(f"the valid data in the company serializer is: {valid_data}")
         user = User.objects.create_user(
             email=valid_data['email'],
             username=valid_data['username'],
             password=valid_data['password'],
-            user_type='company',
+            user_type=valid_data['user_type'],
             field_of_work=valid_data['field_of_work']
         )
         return user
-

@@ -5,14 +5,18 @@
 // lib/types/costumer.ts
 export default interface Costumer {
     email: string;
-    password: string;
     username: string;
-    birth_date: string; // store as string for input
+    password: string;
+    password_confirm: string;
+    date_of_birth: string; // store as string for input
+    user_type: string; // TODO: Add user type later:
 }
 
-//   -d '{
-//     "email": "test3@example.com",
-//     "password": "secret123",
-//     "username": "tester3",
-//     "birth_date": "1995-05-20"
-//   }'
+// {
+//   "email": "test3@example.com",
+//   "password": "secret123",
+//   "password_confirm": "secret123",
+//   "username": "tester3",
+//   "date_of_birth": "1995-05-20"
+// }
+

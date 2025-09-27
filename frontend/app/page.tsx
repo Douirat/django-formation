@@ -4,9 +4,18 @@ import { useState, useEffect } from 'react'
 
 
 export default function HomePage() {
-    const { isLogged, loggedUser, toggleToCostumer, toggleToCompany, Login, Logout } = authUser()
+    const { chosen_user, chooseCostumer, chooseCompany, loggedUser, toggleToCostumer, toggleToCompany, authenticate ,Logout } = authUser()
     const [toggleLogginRegistration, setToggleLogginRegistration] = useState(true)
     
+  useEffect(() => {
+    const fetchUser = async () => {
+      const t = await authenticate();
+      console.log("Authenticated user:", t);
+    };
+    fetchUser();
+  }, []);
+
+
     return (
         <main>
        {loggedUser === "customer" ? (

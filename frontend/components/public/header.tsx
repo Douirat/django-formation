@@ -4,7 +4,7 @@ import { authUser } from '../../contexts/authContext'
 import Link from "next/link"
 
 export default function HeaderComponent() {
-    const { isLogged, loggedUser, toggleToCostumer, toggleToCompany, Login, Logout } = authUser()
+    const { loggedUser, toggleToCostumer, toggleToCompany, Logout} = authUser()
 
     // create a function to handle logout:
     const triggerLogout = () => {
@@ -42,7 +42,7 @@ export default function HeaderComponent() {
 
     return (
         <>
-            {isLogged ? (
+            {loggedUser != "" ? (
                 <header>
                     <div>
                         <Link href="/">Home</Link>
