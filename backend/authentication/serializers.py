@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only= True)
     class Meta:
         model = User
-        fields = ['id', 'email', 'password', 'username', 'date_of_birth', 'field_of_work', 'date_joined']
+        fields = ['id', 'email', 'password', 'username', 'date_of_birth', 'user_type', 'field_of_work', 'date_joined']
         read_only_fields = ('id', 'date_joined')
 # TODO: Studying the serialyzer documentation when having the internet.
     def to_representation(self, instance):

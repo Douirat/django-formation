@@ -14,7 +14,7 @@ export default function HeaderComponent() {
         if (!token) {
             console.error("No auth token found");
         } else {
-            fetch("http://127.0.0.1:8000/customers/logout/", {
+            fetch("http://127.0.0.1:8000/authentication/logout/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

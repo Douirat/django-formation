@@ -3,11 +3,21 @@ import { authUser } from '../../contexts/authContext'
 import { useState } from 'react'
 
 export default function HomePage() {
-    const { isLogged, loggedUser, toggleToCostumer, toggleToCompany, Login, Logout } = authUser()
+    const {
+        chosen_user,
+        chooseCostumer,
+        chooseCompany,
+        loggedUser,
+        toggleToCostumer,
+        toggleToCompany,
+        setTheLoggedUser,
+        authenticate,
+        Logout,
+      } = authUser()
     const [toggleLogginRegistration, setToggleLogginRegistration] = useState(true)
     return (
         <main>
-            {isLogged ? (
+            {loggedUser ? (
                 <>
                     <p>wellcome home Ben Doe.</p>
                     <button onClick={Logout}>Logout</button>
