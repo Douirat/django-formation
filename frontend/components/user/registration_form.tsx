@@ -4,7 +4,6 @@ import User from "../../lib/types/user";
 import { useState } from "react";
 import { authUser } from "../../contexts/authContext";
 import {useRouter} from "next/navigation";
-import { log } from "console";
 
 export default function UserRegistrationForm() {
   // form state
@@ -30,9 +29,7 @@ const router = useRouter()
     chooseCostumer,
     chooseCompany,
     loggedUser,
-    toggleToCostumer,
-    toggleToCompany,
-    setTheLoggedUser,
+    setTheLoggedinUser,
     Logout,
   } = authUser();
 
@@ -166,7 +163,7 @@ const router = useRouter()
       if (!res.ok) throw new Error("Registration failed");
       setMessage("Registered successfully!");
       const data = await res.json();
-      setTheLoggedUser(data.user.user_type)
+      setTheLoggedinUser(data.user)
       router.push('/')
       console.log("response", data); // THis line will wait foe the web API to resolve the promise then finish execution because of the blocking await keyword.
       localStorage.setItem("authToken", data.token);

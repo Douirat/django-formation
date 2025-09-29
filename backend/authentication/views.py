@@ -9,7 +9,7 @@ from .serializers import (
     CompanyRegistrationSerializer,
     CostumerRegistrationSerializer
 )
-from django.contrib.auth import authenticate, login, logout, get_user_model
+# from django.contrib.auth import authenticate, login, logout, get_user_model
 from rest_framework.authtoken.models import Token
 # from django.contrib.auth import get_user_model
 

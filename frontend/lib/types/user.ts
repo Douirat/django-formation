@@ -1,6 +1,4 @@
 // lib/types/user.ts
-type UserType = 'company' | 'customer'; // extendable for other types and costumized type.
-
 export default interface User {
   email: string;
   username: string;

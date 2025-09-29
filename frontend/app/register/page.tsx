@@ -12,9 +12,6 @@ const router = useRouter()
     chooseCostumer,
     chooseCompany,
     loggedUser,
-    toggleToCostumer,
-    toggleToCompany,
-    setTheLoggedUser,
     authenticate,
     Logout,
   } = authUser();
@@ -22,9 +19,9 @@ const router = useRouter()
 
 useEffect(()=>{
 const check = async ()=>{
-  const u = await authenticate()
-  if(u != null){
-    console.log(`the user is already loged: ${u}`)
+  const user = await authenticate()
+  if(user != null){
+    console.log(`the user is already loged: ${user}`)
     router.push("/")
   } else {
     setIsLoading(false)

@@ -1,8 +1,8 @@
 "use client";
 import { createContext, useContext, useState, ReactNode } from "react";
 import AuthentificationContext from "../lib/types/authContext";
-import User from "@/lib/types/user";
-import { promises } from "dns";
+import User from "../lib/types/user";
+
 
 const authContext = createContext<AuthentificationContext | undefined>(
   undefined
@@ -10,26 +10,21 @@ const authContext = createContext<AuthentificationContext | undefined>(
 
 // create the auth provider.
 export default function AuthProvider({ children }: { children: ReactNode }) {
-  const [loggedUser, setLoggedUser] = useState<"costumer" | "company" | "">("");
+  const [loggedUser, setLoggedUser] = useState< User | null >(null);
+
+  // TODO: set the loggedin user:
+const setTheLoggedinUser = (user: User) => {
+  setLoggedUser(user)
+}
 
   // const [isLogged, setIsLogged] = useState(false)
   // const Login = () => setIsLogged(true)
-  const [chosen_user, setChosenUser] = useState<"costumer" | "company" | "">(
+  const [chosen_user, setChosenUser] = useState<"costumer" | "company" | "">( 
     ""
-  );
+  );  // To help with registration from.
   const chooseCostumer = () => setChosenUser("costumer");
   const chooseCompany = () => setChosenUser("company");
-  const toggleToCostumer = () => setLoggedUser("costumer");
-  const toggleToCompany = () => setLoggedUser("company");
-  const setTheLoggedUser = (arg: string) => {
-    if (arg == "costumer") {
-      toggleToCostumer();
-    } else if (arg == "company") {
-      toggleToCompany();
-    } else {
-      console.log("wrong user type");
-    }
-  };
+
 
   // Create the uthentication function to check if the user has a valid session:
   const authenticate = async (): Promise<User | null> => {
@@ -49,7 +44,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
 
       const user: User = await res.json();
       console.log("The logged in user is:", user);
-
+      setLoggedUser(user)
       return user;
     } catch (err) {
       console.error("Authentication check failed:", err);
@@ -58,19 +53,17 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   // empty the user.
-  const Logout = () => setLoggedUser("");
+  const Logout = () => setLoggedUser(null);
 
   return (
     <authContext.Provider
       value={{
-        chosen_user,
-        chooseCostumer,
+        chosen_user, // to determine which registration form
+        chooseCostumer, //chosen
         chooseCompany,
-        loggedUser,
-        toggleToCostumer,
-        toggleToCompany,
-        setTheLoggedUser,
-        authenticate,
+        loggedUser,  // determine the type of the user (costumer/company).
+        authenticate,  // check the visitor session.
+        setTheLoggedinUser,
         Logout,
       }}
     >

@@ -23,7 +23,7 @@ class Service(models.Model):
         ('Plumbing', 'Plumbing'),
         ('Water Heaters', 'Water Heaters'),
     )
-    field_of_work = models.CharField(max_length=30, blank=False, null=False, choices=choices)
+    field = models.CharField(max_length=30, blank=False, null=False, choices=choices)
     created_at = models.DateTimeField(auto_now=True, null=False)
 
     def __str__(self):
