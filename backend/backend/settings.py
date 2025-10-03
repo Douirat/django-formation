@@ -80,6 +80,7 @@ TEMPLATES = [
     },
 ]
 
+# TODO: understand the relationship of this API with the authentication system.
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',

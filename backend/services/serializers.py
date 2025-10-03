@@ -1,9 +1,8 @@
 from rest_framework import serializers
 from .models import Service
 
-# create a service serializer:
 class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
-        fields = ['id', 'company', 'name', 'description', 'price_per_hour', 'field', 'created_at']
-
+        fields = '__all__'  # Include all fields
+        read_only_fields = ['id', 'created_at']  # These are managed by Django/database

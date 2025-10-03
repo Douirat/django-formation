@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { authUser } from "../../contexts/authContext";
 import { useRouter } from "next/navigation";
-
+import Service_form from "../../components/service/company_service";
 export default function LoginPage() {
   const {
     loggedUser,
@@ -21,18 +21,23 @@ export default function LoginPage() {
       if (user != null) {
         console.log(`the user is already loged: ${user}`);
         
+        setIsLoading(false);
       } else {
         router.push("/");
-        setIsLoading(false);
       }
     };
     check();
   }, []);
 
 
-  const handleSubmit = () => {
-    
+
+
+  useEffect(()=>{
+  if(!loggedUser){
+    router.push("/")
   }
+}, [loggedUser])
+
 
   return (
     <>
@@ -40,17 +45,19 @@ export default function LoginPage() {
         <div>
           <p>Loading...</p>
         </div>
-      ) : activeForm ? (
+      ) : loggedUser?.user_type != "costumer" ? (activeForm ? (
         <div>
-          <form onSubmit={handleSubmit}>
-
-          </form>
+          <Service_form/>
         </div>
       ) : (
         <main>
           <p>Hello mother fucker</p>
           <button onClick={() => setActiveForm(true)}>create service</button>
         </main>
+      )) : (
+        <div>
+          <p>The user is a costumer</p>
+        </div>
       )}
     </>
   );

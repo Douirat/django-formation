@@ -3,28 +3,25 @@ import { createContext, useContext, useState, ReactNode } from "react";
 import AuthentificationContext from "../lib/types/authContext";
 import User from "../lib/types/user";
 
-
 const authContext = createContext<AuthentificationContext | undefined>(
   undefined
 );
 
 // create the auth provider.
 export default function AuthProvider({ children }: { children: ReactNode }) {
-  const [loggedUser, setLoggedUser] = useState< User | null >(null);
+  const [loggedUser, setLoggedUser] = useState<User | null>(null);
 
   // TODO: set the loggedin user:
-const setTheLoggedinUser = (user: User) => {
-  setLoggedUser(user)
-}
+  const setTheLoggedinUser = (user: User) => {
+    setLoggedUser(user);
+  };
 
-  // const [isLogged, setIsLogged] = useState(false)
-  // const Login = () => setIsLogged(true)
-  const [chosen_user, setChosenUser] = useState<"costumer" | "company" | "">( 
+
+  const [chosen_user, setChosenUser] = useState<"costumer" | "company" | "">(
     ""
-  );  // To help with registration from.
+  ); // To help with registration from.
   const chooseCostumer = () => setChosenUser("costumer");
   const chooseCompany = () => setChosenUser("company");
-
 
   // Create the uthentication function to check if the user has a valid session:
   const authenticate = async (): Promise<User | null> => {
@@ -44,7 +41,7 @@ const setTheLoggedinUser = (user: User) => {
 
       const user: User = await res.json();
       console.log("The logged in user is:", user);
-      setLoggedUser(user)
+      setLoggedUser(user);
       return user;
     } catch (err) {
       console.error("Authentication check failed:", err);
@@ -53,7 +50,10 @@ const setTheLoggedinUser = (user: User) => {
   };
 
   // empty the user.
-  const Logout = () => setLoggedUser(null);
+  const Logout = () => {
+    setLoggedUser(null);
+    setChosenUser("");
+  };
 
   return (
     <authContext.Provider
@@ -61,8 +61,8 @@ const setTheLoggedinUser = (user: User) => {
         chosen_user, // to determine which registration form
         chooseCostumer, //chosen
         chooseCompany,
-        loggedUser,  // determine the type of the user (costumer/company).
-        authenticate,  // check the visitor session.
+        loggedUser, // determine the type of the user (costumer/company).
+        authenticate, // check the visitor session.
         setTheLoggedinUser,
         Logout,
       }}

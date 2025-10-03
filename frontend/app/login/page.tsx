@@ -14,9 +14,7 @@ export default function LoginPage() {
     chooseCostumer,
     chooseCompany,
     loggedUser,
-    toggleToCostumer,
-    toggleToCompany,
-    setTheLoggedUser,
+    setTheLoggedinUser,
     Logout,
   } = authUser();
 
@@ -55,7 +53,7 @@ export default function LoginPage() {
       const data = await res.json();
       console.log(data);
       setMessage("Login successful");
-      setTheLoggedUser(data.user.user_type);
+      setTheLoggedinUser(data.user);
       localStorage.setItem("authToken", data.token);
 
       router.push("/");

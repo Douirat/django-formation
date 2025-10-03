@@ -1,7 +1,7 @@
 export interface Service {
   // Read-only properties (set by server/database)
   readonly id?: number;
-  readonly company?: number; // Set from request.user on server
+  company?: number; // Set from request.user on server
   readonly created_at?: string;
   
   // User-provided properties
